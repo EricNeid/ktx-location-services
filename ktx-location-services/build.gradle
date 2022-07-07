@@ -1,0 +1,83 @@
+/*
+ * SPDX-FileCopyrightText: 2021 Eric Neidhardt
+ * SPDX-License-Identifier: MIT
+ */
+def groupId = 'com.github.ericneid'
+def libraryName = 'ktx-location-services'
+def libraryVersion = '0.1.0'
+
+ext {
+	PUBLISH_GROUP_ID = groupId
+	PUBLISH_VERSION = libraryVersion
+	PUBLISH_ARTIFACT_ID = libraryName
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.jaredsburrows.license'
+apply from: "${rootProject.projectDir}/scripts/publish-mavencentral.gradle"
+
+android {
+	compileSdkVersion rootProject.compileSdkVersion
+	buildToolsVersion rootProject.buildToolsVersion
+
+	defaultConfig {
+		minSdkVersion project.minSdkVersion
+		targetSdkVersion project.targetSdkVersion
+		testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled false
+		}
+	}
+
+	sourceSets {
+		main.java.srcDirs += 'src/main/kotlin'
+		test.java.srcDirs += 'src/test/kotlin'
+		debug.java.srcDirs += 'src/debug/kotlin'
+		release.java.srcDirs += 'src/release/kotlin'
+	}
+
+	compileOptions {
+		sourceCompatibility = '1.8'
+		targetCompatibility = '1.8'
+	}
+
+	testOptions {
+		unitTests.returnDefaultValues = true
+	}
+}
+
+group = groupId
+version = libraryVersion
+archivesBaseName = libraryName
+
+repositories {
+	google()
+	mavenCentral()
+}
+
+def androidxTestVersion = "1.4.0"
+def coroutineVersion = "1.6.3"
+
+dependencies {
+	// google play services
+	implementation("com.google.android.gms:play-services-location:20.0.0")
+
+	// kotlin coroutines
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
+
+	// testing
+	testImplementation("junit:junit:4.13.2")
+	testImplementation("android.arch.core:core-testing:1.1.1")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
+
+	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+
+	androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
+	androidTestImplementation("androidx.test:runner:$androidxTestVersion")
+	androidTestImplementation("androidx.test:rules:$androidxTestVersion")
+}
