@@ -12,37 +12,37 @@ ext {
 	PUBLISH_ARTIFACT_ID = libraryName
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'com.jaredsburrows.license'
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "com.jaredsburrows.license"
 apply from: "${rootProject.projectDir}/scripts/publish-mavencentral.gradle"
 
 android {
-	compileSdkVersion rootProject.compileSdkVersion
-	buildToolsVersion rootProject.buildToolsVersion
+	compileSdkVersion = rootProject.compileSdkVersion
+	buildToolsVersion = rootProject.buildToolsVersion
 
 	defaultConfig {
 		minSdkVersion project.minSdkVersion
 		targetSdkVersion project.targetSdkVersion
-		testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 
 	buildTypes {
 		release {
-			minifyEnabled false
+			minifyEnabled = false
 		}
 	}
 
 	sourceSets {
-		main.java.srcDirs += 'src/main/kotlin'
-		test.java.srcDirs += 'src/test/kotlin'
-		debug.java.srcDirs += 'src/debug/kotlin'
-		release.java.srcDirs += 'src/release/kotlin'
+		main.java.srcDirs += "src/main/kotlin"
+		test.java.srcDirs += "src/test/kotlin"
+		debug.java.srcDirs += "src/debug/kotlin"
+		release.java.srcDirs += "src/release/kotlin"
 	}
 
 	compileOptions {
-		sourceCompatibility = '1.8'
-		targetCompatibility = '1.8'
+		sourceCompatibility = "1.8"
+		targetCompatibility = "1.8"
 	}
 
 	testOptions {
@@ -72,11 +72,7 @@ dependencies {
 
 	// testing
 	testImplementation("junit:junit:4.13.2")
-	testImplementation("android.arch.core:core-testing:1.1.1")
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
-
-	testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-
 	androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineVersion")
 	androidTestImplementation("androidx.test:runner:$androidxTestVersion")
 	androidTestImplementation("androidx.test:rules:$androidxTestVersion")
