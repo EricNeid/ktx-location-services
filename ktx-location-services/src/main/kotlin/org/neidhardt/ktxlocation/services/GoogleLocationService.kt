@@ -8,12 +8,11 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.location.LocationManager
 import android.os.HandlerThread
 import com.google.android.gms.location.*
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.*
 import org.neidhardt.ktxlocation.exceptions.MissingPermissionCoarseLocation
 import org.neidhardt.ktxlocation.exceptions.MissingPermissionFineLocation
 
@@ -37,8 +36,7 @@ class GoogleLocationService(private val context: Context) {
 	/**
 	 * [getLastKnowLocationFromDevice] returns the last location obtained by any google
 	 * location service on this device. It doest not retrieve a new location.
-	 * To get a new location, it is usually better to call: getLocationUpdates(...) and use the
-	 * first received location.
+	 * To get a new location, it is usually better to call: getLocation().
 	 *
 	 * It does not check if google play services are present on the device.
 	 * It does check if booth permission [Manifest.permission.ACCESS_FINE_LOCATION]
@@ -67,8 +65,20 @@ class GoogleLocationService(private val context: Context) {
 				asyncLocationTask.addOnFailureListener {
 					error(it)
 				}
+				awaitClose {
+				}
 			}
 		}
+	}
+
+	/**
+	 * [getLocation] returns a single location from the android location manager, by using
+	 * the GPS_PROVIDER.
+	 */
+	suspend fun getLocation(): Location {
+		return getLocationUpdates(LocationRequests.cheap(10))
+			.onEach { lastKnowLocation = it }
+			.first()
 	}
 
 	/**

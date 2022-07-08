@@ -14,8 +14,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.HandlerThread
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.*
 import org.neidhardt.ktxlocation.exceptions.MissingPermissionCoarseLocation
 import org.neidhardt.ktxlocation.exceptions.MissingPermissionFineLocation
 import org.neidhardt.ktxlocation.exceptions.ProviderDisabled
@@ -37,8 +36,17 @@ class AndroidLocationService(private val context: Context) {
 	var lastKnowLocation: Location? = null
 
 	/**
+	 * [getLocation] returns a single location from the android location manager, by using
+	 * the GPS_PROVIDER.
+	 */
+	suspend fun getLocation(): Location {
+		return getLocationUpdates(0, 0f, LocationManager.GPS_PROVIDER)
+			.onEach { lastKnowLocation = it }
+			.first()
+	}
+
+	/**
 	 * [getLocationUpdates] returns Flow for continuous location updates.
-	 * It does not check if google play services are present on the device.
 	 * It does check if booth permission [Manifest.permission.ACCESS_FINE_LOCATION] and [Manifest.permission.ACCESS_COARSE_LOCATION]
 	 * are granted. If permission is missing, it emits error of either [MissingPermissionFineLocation] or [MissingPermissionCoarseLocation].
 	 *

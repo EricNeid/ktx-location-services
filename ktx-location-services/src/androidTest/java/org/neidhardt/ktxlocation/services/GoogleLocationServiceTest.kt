@@ -5,12 +5,15 @@
 package org.neidhardt.ktxlocation.services
 
 import android.content.Context
+import android.location.LocationManager
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.rule.GrantPermissionRule
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -50,10 +53,22 @@ class GoogleLocationServiceTest {
 
 	@Test
 	@kotlinx.coroutines.ExperimentalCoroutinesApi
+	fun getLocation() = runTest {
+		// action
+		val result = unit.getLocation()
+		// verify
+		assertNotNull(result)
+		assertNotNull(result.latitude)
+		assertNotNull(result.longitude)
+		assertEquals(result, unit.lastKnowLocation)
+	}
+
+	@Test
+	@kotlinx.coroutines.ExperimentalCoroutinesApi
 	fun getLocationUpdates() = runTest {
 		// action
 		val source = unit.getLocationUpdates(
-			LocationRequests.balanced(1000)
+			LocationRequests.cheap(10)
 		)
 		val result = source.first()
 		// verify

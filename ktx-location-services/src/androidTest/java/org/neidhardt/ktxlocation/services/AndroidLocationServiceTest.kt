@@ -37,10 +37,21 @@ class AndroidLocationServiceTest {
 		unit = AndroidLocationService(context)
 	}
 
-	@kotlinx.coroutines.ExperimentalCoroutinesApi
 	@Test
+	@kotlinx.coroutines.ExperimentalCoroutinesApi
+	fun getLocation() = runTest {
+		// action
+		val result = unit.getLocation()
+		// verify
+		assertNotNull(result)
+		assertNotNull(result.latitude)
+		assertNotNull(result.longitude)
+		assertEquals(result, unit.lastKnowLocation)
+	}
+
+	@Test
+	@kotlinx.coroutines.ExperimentalCoroutinesApi
 	fun getLocationUpdates() = runTest {
-		// arrange
 		// action
 		val result = unit.getLocationUpdates(
 			1000,
@@ -53,5 +64,4 @@ class AndroidLocationServiceTest {
 		assertNotNull(result.longitude)
 		assertEquals(result, unit.lastKnowLocation)
 	}
-
 }
