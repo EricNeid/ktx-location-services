@@ -6,11 +6,6 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 apply plugin: 'org.jetbrains.dokka'
 
-def projectDescription = "KTX-location-services is a simple wrapper around some of Androids Location APIs.\n" +
-        "It provides access to basic functionalities (ie. location and bearing) by using\n" +
-        "kotlin coroutines."
-def githubUrl = "https://github.com/EricNeid/rx-location-services"
-
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     if (project.plugins.findPlugin("com.android.library")) {
@@ -88,8 +83,8 @@ publishing {
             // Mostly self-explanatory metadata
             pom {
                 name = PUBLISH_ARTIFACT_ID
-                description = projectDescription
-                url = githubUrl
+                description = PROJECT_DESCRIPTION
+                url = PROJECT_URL
                 licenses {
                     license {
                         name = 'MIT License'
@@ -106,9 +101,9 @@ publishing {
                 }
                 // Version control info - if you're using GitHub, follow the format as seen here
                 scm {
-                    connection = 'scm:git:http://github.com/EricNeid/ktx-location-services.git'
-                    developerConnection = 'scm:git:http://github.com/EricNeid/ktx-location-services.git'
-                    url = 'https://github.com/EricNeid/ktx-location-services'
+                    connection =          PROJECT_SCM_URL
+                    developerConnection = PROJECT_SCM_URL
+                    url = PROJECT_URL
                 }
                 // A slightly hacky fix so that your POM will include any transitive dependencies
                 // that your library builds upon
@@ -140,17 +135,6 @@ publishing {
             }
         }
     }
-}
-
-// automatically close staged release
-// requires the following plugin in root:build.gradle
-//     apply plugin: 'io.codearte.nexus-staging'
-//     classpath 'io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0'
-nexusStaging {
-    packageGroup = PUBLISH_GROUP_ID
-    stagingProfileId = sonatypeStagingProfileId
-    username = ossrhUsername
-    password = ossrhPassword
 }
 
 signing {

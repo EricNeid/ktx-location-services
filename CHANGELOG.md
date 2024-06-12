@@ -7,6 +7,11 @@ SPDX-License-Identifier: CC-BY-4.0
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Changed
+* Update build scripts to kotlin
+* Update build dependencies
+* Cleanup
+
 ## v0.1.0 - 2022-07-07
 ### Added
 * Initial commit
