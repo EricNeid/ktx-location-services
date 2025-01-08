@@ -11,7 +11,6 @@ import android.content.Context.LOCATION_SERVICE
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 import android.os.HandlerThread
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -64,19 +63,14 @@ class AndroidLocationService(private val context: Context) {
 		return channelFlow{
 			// callback for location updates
 			val locationUpdateCallback = object : LocationListener {
-				override fun onLocationChanged(location: Location?) {
-					location?.let {
-						lastKnowLocation = it
-						trySend(it)
-					}
+				override fun onLocationChanged(location: Location) {
+					lastKnowLocation = location
+					trySend(location)
 				}
-				override fun onProviderDisabled(provider: String?) {
-					error(ProviderDisabled("Provider ${provider ?: "null"} was disabled"))
+				override fun onProviderDisabled(provider: String) {
+					error(ProviderDisabled("Provider $provider was disabled"))
 				}
-				@Deprecated("Deprecated in Java")
-				override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-				}
-				override fun onProviderEnabled(provider: String?) {
+				override fun onProviderEnabled(provider: String) {
 				}
 			}
 			// star receiving updates

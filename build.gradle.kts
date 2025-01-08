@@ -10,10 +10,9 @@ buildscript {
 	}
 	dependencies {
 		classpath("com.android.tools.build:gradle:8.2.2")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
 
 		classpath("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
-		classpath("com.jaredsburrows:gradle-license-plugin:0.8.90")
 	}
 }
 

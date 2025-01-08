@@ -22,7 +22,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.ericneid:ktx-location-services:0.1.0'
+    implementation("com.github.ericneid:ktx-location-services:0.2.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
 ```
 
